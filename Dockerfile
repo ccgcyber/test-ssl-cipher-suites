@@ -1,5 +1,5 @@
 FROM ubuntu:artful
-LABEL maintainer="omerlh@gmail.com∂"
+LABEL maintainer="omerlh@gmail.com"
 WORKDIR app
 COPY Gemfile Gemfile.lock /app/
 RUN apt-get update && apt-get install -y --no-install-recommends bison \
@@ -13,5 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends bison \
         zlib1g-dev \ 
         nmap && \
     rm -rf /var/lib/apt/lists/* && \
-    bundle install
+    bundle install --without development test
 COPY . /app
+
+ENTRYPOINT [ "ruby", "./parse.rb" ]

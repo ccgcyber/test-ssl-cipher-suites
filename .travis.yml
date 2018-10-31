@@ -1,0 +1,19 @@
+sudo: required
+cache: bundler
+
+language: ruby
+
+services:
+  - docker
+
+script:
+  - bundle install
+  - bundle exec rspec
+  - docker build . -t local/test-ssl-cipher-suites --label COMMIT_HASH=$TRAVIS_COMMIT --label BUILD_ID=$TRAVIS_BUILD_ID
+  - docker run -it --rm local/test-ssl-cipher-suites blog.solutotlv.com
+
+deploy:
+  provider: script
+  script: bash scripts/push_image.sh
+  on:
+    branch: master
